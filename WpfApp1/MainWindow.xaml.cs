@@ -65,8 +65,15 @@ namespace WpfApp1
                 {
                     continue;
                 }
-                m = new Mat(contours[i].Length, 2, MatType.CV_32FC1, contours[i]);
-                m = m.Reshape(1); // to 1 channel
+                //m = new Mat(contours[i].Length, 2, MatType.CV_32FC1, contours[i]);
+                m = new Mat(contours[i].Length, 2, MatType.CV_32FC1);
+                for(int index = 0; index < contours[i].Length; index++)
+                {
+                    m.Set(index, 0, (float)contours[i][index].X);
+                    m.Set(index, 1, (float)contours[i][index].Y);
+
+                }
+                // m = m.Reshape(1); // to 1 channel
 
                 // 両方とも空にして初期化
                 mean = new Mat();
@@ -76,11 +83,12 @@ namespace WpfApp1
                 Debug.WriteLine(Cv2.Format(mean, FormatType.Python));
                 Debug.WriteLine(Cv2.Format(eigenVectors, FormatType.NumPy));
 
-                Point pt = mean.At<Point>(0);
-                float x = eigenVectors.At<float>(0, 0);
-                float y = eigenVectors.At<float>(0, 1);
-                Debug.WriteLine("vec:" + x + "," + y);
-                Debug.WriteLine("pt:" + pt);
+                float pt_x = mean.At<float>(0, 0);
+                float pt_y = mean.At<float>(0, 1);
+                float eigen_x = eigenVectors.At<float>(0, 0);
+                float eigen_y = eigenVectors.At<float>(0, 1);
+                Debug.WriteLine("vec:" + eigen_x + "," + eigen_y);
+                Debug.WriteLine("pt:" + pt_x + ":" + pt_y);
                 Debug.WriteLine("--------------------------");
             }
 
